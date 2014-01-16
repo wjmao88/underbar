@@ -361,7 +361,6 @@ var _ = { };
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
-    var numArr = arguments.length
     var i = 0;
     var result = [];
     var temp = _.pluck(arguments, i)
@@ -397,6 +396,10 @@ var _ = { };
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var check = _.flatten(Array.prototype.slice.call(arguments, 1));
+    return _.reject(array, function(element){
+      return _.contains(check, element);
+    });
   };
 
 
