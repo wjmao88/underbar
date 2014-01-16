@@ -355,6 +355,16 @@ var _ = { };
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
+    var numArr = arguments.length
+    var i = 0;
+    var result = [];
+    var temp = _.pluck(arguments, i)
+    while (_.filter(temp, function(element){return element !== undefined}).length > 0) {
+      result.push(temp);
+      i++;
+      temp = _.pluck(arguments, i);
+    } 
+    return result;
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
@@ -362,6 +372,12 @@ var _ = { };
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    if (! Array.isArray(nestedArray)){
+      result.push(nestedArray);
+    }
+    _.each(nestedArray, function(element){
+      _.flatten(nestedArray, result);
+    })
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
