@@ -420,16 +420,28 @@ var _ = { };
   // See the Underbar readme for details.
   _.throttle = function(func, wait) {
     var lastCalled = 0;
-    var current = (new Date()).getTime();
+    var current = wait + 1;
     var result = undefined;
 
-    return function (){
-      if (lastCalled + wait <= current){
+    var schedule = function(delay){
+      setTimeout(makeCall, delay);
+    }
+
+    var makeCall = function(){
+      current = (new Date()).getTime(); 
+      var delay = lastCalled + wait - current;
+      if (delay <= 0){
         result =  func.apply(null, arguments);
         lastCalled = current;
-      } 
+      } else {
+        schedule(delay);
+      }
+    };
+
+    return function(){
+      makeCall();
       return result;
-    }
+    };
   };
 
 }).call(this);
